@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './styles/theme';
+import { GlobalStyles } from './styles/GlobalStyles';
+import { GameProvider, useGame } from './context/GameContext';
+import { GameContainer, GameTitle } from './components/styled/GameElements';
+import GameSetup from './components/GameSetup';
+import GamePlay from './components/GamePlay';
+import GameOver from './components/GameOver';
 
-function App() {
+const Game: React.FC = () => {
+  const { state } = useGame();
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GameContainer>
+      <GameTitle>Rock Paper Scissors Board Game</GameTitle>
+      
+      {state.phase === 'setup' && <GameSetup />}
+      {(state.phase === 'playing' || state.phase === 'duel' || state.phase === 'cardEffect' || state.phase === 'interaction') && <GamePlay />}
+      {state.phase === 'gameOver' && <GameOver />}
+    </GameContainer>
   );
-}
+};
+
+const App: React.FC = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <GameProvider>
+        <Game />
+      </GameProvider>
+    </ThemeProvider>
+  );
+};
 
 export default App;
