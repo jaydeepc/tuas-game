@@ -350,13 +350,21 @@ const GamePlay: React.FC = () => {
         {/* Always show the End Turn button regardless of phase */}
         <div style={{ marginTop: '20px', marginBottom: '20px' }}>
           <Button 
-            onClick={() => dispatch({ type: 'END_TURN' })}
+            onClick={() => {
+              // If we're in cardEffect phase, also reset the phase to playing for the next player
+              if (state.phase === 'cardEffect') {
+                dispatch({ type: 'END_TURN' });
+              } else {
+                dispatch({ type: 'END_TURN' });
+              }
+            }}
             variant="primary"
           >
             End Turn
           </Button>
         </div>
         
+        {/* Show dice and card buttons in playing phase */}
         {state.phase === 'playing' && (
           <>
             <div style={{ marginBottom: '20px' }}>
@@ -397,7 +405,7 @@ const GamePlay: React.FC = () => {
         {/* Show a message if the player needs to end their turn */}
         {state.phase === 'cardEffect' && (
           <div style={{ textAlign: 'center', marginTop: '20px', color: '#FFEB3B' }}>
-            <p>Click "End Turn" to continue to the next player's turn</p>
+            <p>Card effect has been applied! Click "End Turn" to continue to the next player's turn</p>
           </div>
         )}
       </GameControls>
