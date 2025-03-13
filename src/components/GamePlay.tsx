@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import styled from 'styled-components';
 import { 
   GameControls,
   Button,
@@ -14,6 +15,142 @@ import GameBoard from './GameBoard';
 import PlayerInfo from './PlayerInfo';
 import { DiceRoller } from './Dice';
 import Card from './Card';
+
+// Enhanced styled components
+const GamePlayContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing.lg};
+`;
+
+const PlayersContainer = styled(motion.div)`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  width: 100%;
+`;
+
+const EnhancedGameControls = styled(GameControls)`
+  background: ${({ theme }) => theme.effects.glass};
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  padding: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.xl};
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+`;
+
+const ControlsSection = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const ButtonsRow = styled(motion.div)`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin: ${({ theme }) => theme.spacing.md} 0;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+const EnhancedButton = styled(Button)<{ variant?: 'primary' | 'secondary' | 'error' }>`
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.xl}`};
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: ${({ theme }) => theme.borderRadius.pill};
+  background: ${({ theme, variant = 'primary' }) => 
+    variant === 'primary' 
+      ? theme.colors.gradients.primary
+      : variant === 'secondary'
+        ? theme.colors.gradients.secondary
+        : theme.colors.gradients.accent};
+  color: white;
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  transition: all ${({ theme }) => theme.transitions.medium};
+  position: relative;
+  overflow: hidden;
+`;
+
+const StatusMessage = styled(motion.div)<{ type?: 'info' | 'warning' | 'success' }>`
+  text-align: center;
+  margin: ${({ theme }) => theme.spacing.md} 0;
+  padding: ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  background: ${({ theme, type = 'info' }) => 
+    type === 'info' 
+      ? `${theme.colors.info}20`
+      : type === 'warning'
+        ? `${theme.colors.warning}20`
+        : `${theme.colors.success}20`};
+  color: ${({ theme, type = 'info' }) => 
+    type === 'info' 
+      ? theme.colors.info
+      : type === 'warning'
+        ? theme.colors.warning
+        : theme.colors.success};
+  font-weight: 500;
+  width: 100%;
+  max-width: 600px;
+  border-left: 4px solid ${({ theme, type = 'info' }) => 
+    type === 'info' 
+      ? theme.colors.info
+      : type === 'warning'
+        ? theme.colors.warning
+        : theme.colors.success};
+`;
+
+const EnhancedModalOverlay = styled(ModalOverlay)`
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.7);
+`;
+
+const EnhancedModalContent = styled(ModalContent)`
+  ${({ theme }) => theme.effects.glass}
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
+  padding: ${({ theme }) => theme.spacing.xl};
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  min-width: 500px;
+  box-shadow: ${({ theme }) => theme.shadows.large};
+  border: 1px solid rgba(255, 255, 255, 0.1);
+`;
+
+const EnhancedModalTitle = styled(ModalTitle)`
+  font-size: 2rem;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.primary};
+  text-shadow: ${({ theme }) => theme.shadows.text(theme.colors.primaryDark)};
+  text-align: center;
+  position: relative;
+`;
+
+const ModalDescription = styled.div`
+  text-align: center;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.onSurface};
+`;
+
+const CardContainer = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+`;
 
 const GamePlay: React.FC = () => {
   const { state, dispatch } = useGame();
@@ -54,15 +191,6 @@ const GamePlay: React.FC = () => {
   // Handle drawing a card
   const handleDrawCard = (cardType: 'advantage' | 'disadvantage') => {
     dispatch({ type: 'DRAW_CARD', cardType });
-  };
-  
-  // Handle duel result
-  const handleDuelResult = (player1Value: 'rock' | 'paper' | 'scissors', player2Value: 'rock' | 'paper' | 'scissors') => {
-    dispatch({ 
-      type: 'DUEL_RESULT', 
-      player1Value, 
-      player2Value 
-    });
   };
   
   // Handle interaction choices
@@ -137,163 +265,41 @@ const GamePlay: React.FC = () => {
     }
     
     return (
-      <ModalOverlay
+      <EnhancedModalOverlay
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <ModalContent
+        <EnhancedModalContent
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
         >
-          <ModalTitle>{title}</ModalTitle>
+          <EnhancedModalTitle>{title}</EnhancedModalTitle>
           
-          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <ModalDescription>
             <p>{description}</p>
-          </div>
+          </ModalDescription>
           
-          <ModalActions>
+          <ButtonsRow>
             {options.map(option => (
-              <Button 
+              <EnhancedButton 
                 key={option}
                 onClick={() => handleInteractionChoice(option)}
+                variant={
+                  option.includes('advantage') 
+                    ? 'secondary' 
+                    : option.includes('disadvantage') 
+                      ? 'error' 
+                      : 'primary'
+                }
               >
                 {option}
-              </Button>
+              </EnhancedButton>
             ))}
-          </ModalActions>
-        </ModalContent>
-      </ModalOverlay>
-    );
-  };
-  
-  // Render duel modal
-  const renderDuelModal = () => {
-    if (state.phase !== 'duel' || !state.duel.player1 || !state.duel.player2) return null;
-    
-    return (
-      <ModalOverlay
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <ModalContent
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-        >
-          <ModalTitle>Rock Paper Scissors Duel!</ModalTitle>
-          
-          <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '30px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <h3>{state.duel.player1.name}</h3>
-              <div style={{ 
-                width: '80px', 
-                height: '80px', 
-                borderRadius: '50%', 
-                backgroundColor: state.duel.player1.token.type === 'rock' 
-                  ? (state.duel.player1.token.color === 'green' ? '#4CAF50' : '#FF9800')
-                  : state.duel.player1.token.type === 'paper'
-                    ? (state.duel.player1.token.color === 'red' ? '#F44336' : '#2196F3')
-                    : (state.duel.player1.token.color === 'yellow' ? '#FFEB3B' : '#E0E0E0'),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '40px',
-                margin: '0 auto 20px'
-              }}>
-                {state.duel.player1.token.type === 'rock' ? (
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                    <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z" />
-                  </svg>
-                ) : state.duel.player1.token.type === 'paper' ? (
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                    <path d="M8 12l4-4 1.41 1.41L11.83 11H16v2h-4.17l1.59 1.59L12 16l-4-4z" />
-                  </svg>
-                )}
-              </div>
-              
-              {state.duel.result && (
-                <div style={{ 
-                  fontSize: '24px', 
-                  marginTop: '10px',
-                  color: state.duel.result === 'player1' ? '#4CAF50' : state.duel.result === 'player2' ? '#F44336' : '#FFFFFF'
-                }}>
-                  {state.duel.result === 'player1' ? 'Winner!' : state.duel.result === 'player2' ? 'Loser' : 'Draw'}
-                </div>
-              )}
-            </div>
-            
-            <div style={{ textAlign: 'center' }}>
-              <h3>{state.duel.player2.name}</h3>
-              <div style={{ 
-                width: '80px', 
-                height: '80px', 
-                borderRadius: '50%', 
-                backgroundColor: state.duel.player2.token.type === 'rock' 
-                  ? (state.duel.player2.token.color === 'green' ? '#4CAF50' : '#FF9800')
-                  : state.duel.player2.token.type === 'paper'
-                    ? (state.duel.player2.token.color === 'red' ? '#F44336' : '#2196F3')
-                    : (state.duel.player2.token.color === 'yellow' ? '#FFEB3B' : '#E0E0E0'),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '40px',
-                margin: '0 auto 20px'
-              }}>
-                {state.duel.player2.token.type === 'rock' ? (
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                    <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z" />
-                  </svg>
-                ) : state.duel.player2.token.type === 'paper' ? (
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                    <path d="M8 12l4-4 1.41 1.41L11.83 11H16v2h-4.17l1.59 1.59L12 16l-4-4z" />
-                  </svg>
-                )}
-              </div>
-              
-              {state.duel.result && (
-                <div style={{ 
-                  fontSize: '24px', 
-                  marginTop: '10px',
-                  color: state.duel.result === 'player2' ? '#4CAF50' : state.duel.result === 'player1' ? '#F44336' : '#FFFFFF'
-                }}>
-                  {state.duel.result === 'player2' ? 'Winner!' : state.duel.result === 'player1' ? 'Loser' : 'Draw'}
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-            <DiceRoller showRegular={false} showRPS={true} onRPSRoll={(value) => {
-              // For simplicity, just use the same value for both players
-              // In a real implementation, each player would roll their own dice
-              handleDuelResult(value as 'rock' | 'paper' | 'scissors', value as 'rock' | 'paper' | 'scissors');
-            }} />
-          </div>
-          
-          <ModalActions>
-            {state.duel.result && (
-              <Button onClick={() => dispatch({ type: 'END_TURN' })}>
-                Continue
-              </Button>
-            )}
-          </ModalActions>
-        </ModalContent>
-      </ModalOverlay>
+          </ButtonsRow>
+        </EnhancedModalContent>
+      </EnhancedModalOverlay>
     );
   };
   
@@ -302,120 +308,145 @@ const GamePlay: React.FC = () => {
     if (state.phase !== 'cardEffect' || !state.cardInPlay) return null;
     
     return (
-      <ModalOverlay
+      <EnhancedModalOverlay
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <ModalContent
+        <EnhancedModalContent
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
         >
-          <ModalTitle>Card Effect</ModalTitle>
+          <EnhancedModalTitle>Card Effect</EnhancedModalTitle>
           
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}>
-            <Card card={state.cardInPlay} />
-          </div>
+          <CardContainer>
+            <Card card={state.cardInPlay} autoFlip={true} />
+          </CardContainer>
           
-          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <ModalDescription>
             <p>The card effect has been applied!</p>
-          </div>
+          </ModalDescription>
           
-          <ModalActions>
-            <Button onClick={() => dispatch({ type: 'END_TURN' })}>
+          <ButtonsRow>
+            <EnhancedButton 
+              onClick={() => dispatch({ type: 'END_TURN' })}
+              variant="primary"
+            >
               Continue
-            </Button>
-          </ModalActions>
-        </ModalContent>
-      </ModalOverlay>
+            </EnhancedButton>
+          </ButtonsRow>
+        </EnhancedModalContent>
+      </EnhancedModalOverlay>
     );
   };
   
   return (
-    <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+    <GamePlayContainer
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <PlayersContainer>
         {state.players.map((player, index) => (
-          <PlayerInfo 
-            key={player.id} 
-            player={player} 
-            isActive={index === state.currentPlayerIndex} 
-          />
+          <motion.div
+            key={player.id}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <PlayerInfo 
+              player={player} 
+              isActive={index === state.currentPlayerIndex} 
+            />
+          </motion.div>
         ))}
-      </div>
+      </PlayersContainer>
       
       <GameBoard />
       
-      <GameControls>
+      <EnhancedGameControls>
         {/* Always show the End Turn button regardless of phase */}
-        <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-          <Button 
-            onClick={() => {
-              // If we're in cardEffect phase, also reset the phase to playing for the next player
-              if (state.phase === 'cardEffect') {
-                dispatch({ type: 'END_TURN' });
-              } else {
-                dispatch({ type: 'END_TURN' });
-              }
-            }}
+        <ButtonsRow>
+          <EnhancedButton 
+            onClick={() => dispatch({ type: 'END_TURN' })}
             variant="primary"
+            as={motion.button}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             End Turn
-          </Button>
-        </div>
+          </EnhancedButton>
+        </ButtonsRow>
         
         {/* Show dice and card buttons in playing phase */}
         {state.phase === 'playing' && (
           <>
-            <div style={{ marginBottom: '20px' }}>
+            <ControlsSection
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
               <DiceRoller onRegularRoll={handleDiceRoll} />
               
               {diceRolled && diceValue !== null && (
-                <div style={{ marginTop: '15px', textAlign: 'center' }}>
+                <StatusMessage
+                  type="success"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
                   <p>You rolled a {diceValue}!</p>
-                  <Button 
+                  <EnhancedButton 
                     onClick={handleMovePlayer}
                     variant="primary"
                     style={{ marginTop: '10px' }}
                   >
                     Move {diceValue} Spaces
-                  </Button>
-                </div>
+                  </EnhancedButton>
+                </StatusMessage>
               )}
-            </div>
+            </ControlsSection>
             
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', marginTop: '20px' }}>
-              <Button 
+            <ButtonsRow
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <EnhancedButton 
                 variant="secondary"
                 onClick={() => handleDrawCard('advantage')}
               >
                 Draw Advantage Card
-              </Button>
+              </EnhancedButton>
               
-              <Button 
+              <EnhancedButton 
                 variant="error"
                 onClick={() => handleDrawCard('disadvantage')}
               >
                 Draw Disadvantage Card
-              </Button>
-            </div>
+              </EnhancedButton>
+            </ButtonsRow>
           </>
         )}
         
         {/* Show a message if the player needs to end their turn */}
         {state.phase === 'cardEffect' && (
-          <div style={{ textAlign: 'center', marginTop: '20px', color: '#FFEB3B' }}>
+          <StatusMessage 
+            type="warning"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <p>Card effect has been applied! Click "End Turn" to continue to the next player's turn</p>
-          </div>
+          </StatusMessage>
         )}
-      </GameControls>
+      </EnhancedGameControls>
       
       <AnimatePresence>
         {renderInteractionModal()}
-        {renderDuelModal()}
         {renderCardEffectModal()}
       </AnimatePresence>
-    </div>
+    </GamePlayContainer>
   );
 };
 
