@@ -128,62 +128,34 @@ const DiceDots = styled.div<{ value: number }>`
   position: relative;
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-areas: 
-    "a . c"
-    "e g f"
-    "d . b";
-  
-  div {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: white;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Dot 1 */
-  div:nth-child(1) {
-    grid-area: a;
-    display: ${({ value }) => [1, 3, 5].includes(value) ? 'block' : 'none'};
-  }
-  
-  /* Dot 2 */
-  div:nth-child(2) {
-    grid-area: b;
-    display: ${({ value }) => [2, 3, 4, 5, 6].includes(value) ? 'block' : 'none'};
-  }
-  
-  /* Dot 3 */
-  div:nth-child(3) {
-    grid-area: c;
-    display: ${({ value }) => [4, 5, 6].includes(value) ? 'block' : 'none'};
-  }
-  
-  /* Dot 4 */
-  div:nth-child(4) {
-    grid-area: d;
-    display: ${({ value }) => [4, 5, 6].includes(value) ? 'block' : 'none'};
-  }
-  
-  /* Dot 5 */
-  div:nth-child(5) {
-    grid-area: e;
-    display: ${({ value }) => [6].includes(value) ? 'block' : 'none'};
-  }
-  
-  /* Dot 6 */
-  div:nth-child(6) {
-    grid-area: f;
-    display: ${({ value }) => [6].includes(value) ? 'block' : 'none'};
-  }
-  
-  /* Center dot */
-  div:nth-child(7) {
-    grid-area: g;
-    display: ${({ value }) => [1, 3, 5].includes(value) ? 'block' : 'none'};
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
 `;
+
+const DiceDot = styled.div`
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+`;
+
+// Simple component to render the correct number of dots based on dice value
+const DiceDotsDisplay: React.FC<{ value: number }> = ({ value }) => {
+  // Create an array of dots based on the value
+  const dots = Array.from({ length: value }, (_, i) => (
+    <DiceDot key={i} />
+  ));
+  
+  return (
+    <DiceDots value={value}>
+      {dots}
+    </DiceDots>
+  );
+};
 
 interface DiceProps {
   type: DiceType;
@@ -261,17 +233,7 @@ const Dice: React.FC<DiceProps> = ({ type, onRoll }) => {
   const getDiceDisplay = () => {
     if (isRolling) {
       if (type === 'regular') {
-        return (
-          <DiceDots value={randomValues[0] || 1}>
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-          </DiceDots>
-        );
+        return <DiceDotsDisplay value={randomValues[0] || 1} />;
       } else {
         const rpsValues = ['rock', 'paper', 'scissors'];
         const randomValue = rpsValues[randomValues[0] || 0];
@@ -291,17 +253,7 @@ const Dice: React.FC<DiceProps> = ({ type, onRoll }) => {
     }
     
     if (type === 'regular' && typeof dice.value === 'number') {
-      return (
-        <DiceDots value={dice.value}>
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-        </DiceDots>
-      );
+      return <DiceDotsDisplay value={dice.value} />;
     } else if (typeof dice.value === 'string') {
       return getRPSIcon(dice.value as 'rock' | 'paper' | 'scissors');
     }
