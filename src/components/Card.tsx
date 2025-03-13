@@ -56,6 +56,18 @@ const EnhancedCard = styled(StyledCard)<{
         ? theme.shadows.neon(theme.colors.secondary)
         : theme.shadows.neon(theme.colors.error)};
   }
+  
+  @media (max-width: 768px) {
+    width: 180px;
+    height: 250px;
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
+  
+  @media (max-width: 480px) {
+    width: 150px;
+    height: 210px;
+    padding: ${({ theme }) => theme.spacing.xs};
+  }
 `;
 
 const EnhancedCardFront = styled(CardFront)`
@@ -71,6 +83,15 @@ const EnhancedCardFront = styled(CardFront)`
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+    border-radius: ${({ theme }) => theme.borderRadius.medium};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.xs};
+  }
 `;
 
 const EnhancedCardBack = styled(CardBack)`
@@ -98,6 +119,30 @@ const EnhancedCardBack = styled(CardBack)`
     border-radius: ${({ theme }) => theme.borderRadius.medium};
     pointer-events: none;
   }
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+    border-radius: ${({ theme }) => theme.borderRadius.medium};
+    
+    &::before {
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border-width: 1px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.xs};
+    
+    &::before {
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+    }
+  }
 `;
 
 const EnhancedCardTitle = styled(CardTitle)`
@@ -108,6 +153,15 @@ const EnhancedCardTitle = styled(CardTitle)`
   text-shadow: ${({ theme }) => theme.shadows.text(theme.colors.primaryDark)};
   font-weight: 700;
   letter-spacing: 0.5px;
+  
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const EnhancedCardDescription = styled(CardDescription)`
@@ -115,6 +169,16 @@ const EnhancedCardDescription = styled(CardDescription)`
   text-align: center;
   line-height: 1.4;
   margin-top: auto;
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
 `;
 
 const CardIcon = styled(motion.div)<{ cardType: 'advantage' | 'disadvantage' }>`
@@ -130,6 +194,17 @@ const CardIcon = styled(motion.div)<{ cardType: 'advantage' | 'disadvantage' }>`
   align-items: center;
   justify-content: center;
   height: 100px;
+  
+  @media (max-width: 768px) {
+    font-size: 3rem;
+    margin: ${({ theme }) => theme.spacing.sm} 0;
+    height: 80px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 2.5rem;
+    height: 60px;
+  }
 `;
 
 const CardBadge = styled.div<{ cardType: 'advantage' | 'disadvantage' }>`
@@ -149,6 +224,22 @@ const CardBadge = styled.div<{ cardType: 'advantage' | 'disadvantage' }>`
   font-weight: bold;
   box-shadow: ${({ theme }) => theme.shadows.medium};
   z-index: 10;
+  
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    top: -8px;
+    right: -8px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+    top: -6px;
+    right: -6px;
+  }
 `;
 
 const CardBackContent = styled(motion.div)`
@@ -175,6 +266,31 @@ const CardBackContent = styled(motion.div)`
   .card-icon {
     font-size: 4rem;
     margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 768px) {
+    .card-type {
+      font-size: 1rem;
+      margin-top: ${({ theme }) => theme.spacing.sm};
+      letter-spacing: 1px;
+    }
+    
+    .card-icon {
+      font-size: 3.5rem;
+      margin-bottom: ${({ theme }) => theme.spacing.sm};
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .card-type {
+      font-size: 0.8rem;
+      margin-top: ${({ theme }) => theme.spacing.xs};
+    }
+    
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: ${({ theme }) => theme.spacing.xs};
+    }
   }
 `;
 

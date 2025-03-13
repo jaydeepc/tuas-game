@@ -61,6 +61,14 @@ export const GameContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.onBackground};
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 // Game title
@@ -73,6 +81,13 @@ export const GameTitle = styled.h1`
   
   @media (max-width: 768px) {
     font-size: 2rem;
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+    padding: 0 ${({ theme }) => theme.spacing.sm};
   }
 `;
 
@@ -349,6 +364,17 @@ export const Button = styled.button<ButtonProps>`
     transform: none;
     box-shadow: none;
   }
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
+    font-size: 0.8rem;
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
 `;
 
 // Player info
@@ -370,18 +396,47 @@ export const PlayerInfo = styled.div<{ isActive?: boolean }>`
     isActive && css`
       transform: scale(1.05);
     `}
+    
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+    margin: ${({ theme }) => theme.spacing.xs};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.xs};
+    width: 100%;
+    max-width: 300px;
+  }
 `;
 
 export const PlayerName = styled.h3`
   font-size: 1.2rem;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.primary};
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
 `;
 
 export const PlayerCards = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
   margin-top: ${({ theme }) => theme.spacing.sm};
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.xs};
+  }
+  
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `;
 
 // Game controls
@@ -391,6 +446,24 @@ export const GameControls = styled.div`
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: ${({ theme }) => theme.spacing.xl};
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (max-width: 480px) {
+    gap: ${({ theme }) => theme.spacing.xs};
+    margin-top: ${({ theme }) => theme.spacing.md};
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    
+    & > button {
+      margin-bottom: ${({ theme }) => theme.spacing.xs};
+      width: 100%;
+    }
+  }
 `;
 
 // Modal
@@ -415,6 +488,16 @@ export const ModalContent = styled(motion.div)`
   max-height: 90%;
   overflow-y: auto;
   box-shadow: ${({ theme }) => theme.shadows.large};
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.lg};
+    max-width: 95%;
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.md};
+    border-radius: ${({ theme }) => theme.borderRadius.medium};
+  }
 `;
 
 export const ModalTitle = styled.h2`
@@ -422,6 +505,15 @@ export const ModalTitle = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   color: ${({ theme }) => theme.colors.primary};
   text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const ModalActions = styled.div`
@@ -429,6 +521,21 @@ export const ModalActions = styled.div`
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: ${({ theme }) => theme.spacing.lg};
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    width: 100%;
+    
+    & > button {
+      margin-bottom: ${({ theme }) => theme.spacing.sm};
+      width: 100%;
+    }
+  }
 `;
 
 // Game setup
@@ -439,11 +546,23 @@ export const SetupContainer = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    max-width: 95%;
+  }
 `;
 
 export const SetupStep = styled.div`
   width: 100%;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
+  
+  @media (max-width: 768px) {
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const SetupTitle = styled.h2`
@@ -451,6 +570,16 @@ export const SetupTitle = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   color: ${({ theme }) => theme.colors.primary};
   text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const TokenSelection = styled.div`
@@ -459,6 +588,16 @@ export const TokenSelection = styled.div`
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: ${({ theme }) => theme.spacing.lg};
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    gap: ${({ theme }) => theme.spacing.xs};
+    margin-top: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const TokenOption = styled.div<TokenProps & { isSelected?: boolean }>`
@@ -486,6 +625,16 @@ export const TokenOption = styled.div<TokenProps & { isSelected?: boolean }>`
     transform: scale(1.1);
     box-shadow: ${({ theme }) => theme.shadows.medium};
   }
+  
+  @media (max-width: 768px) {
+    width: 70px;
+    height: 70px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 // Game over
@@ -494,6 +643,15 @@ export const GameOverContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding: ${({ theme }) => theme.spacing.lg};
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.md};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const WinnerText = styled.h2`
@@ -501,10 +659,37 @@ export const WinnerText = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   color: ${({ theme }) => theme.colors.primary};
   text-shadow: ${({ theme }) => theme.shadows.glow(theme.colors.primary)};
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const GameOverActions = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.lg};
   margin-top: ${({ theme }) => theme.spacing.xl};
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.md};
+    margin-top: ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.md};
+    width: 100%;
+    
+    & > button {
+      margin-bottom: ${({ theme }) => theme.spacing.sm};
+      width: 100%;
+    }
+  }
 `;

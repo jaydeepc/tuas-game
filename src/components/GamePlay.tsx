@@ -25,6 +25,10 @@ const GamePlayContainer = styled(motion.div)`
   max-width: 1200px;
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.lg};
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 const PlayersContainer = styled(motion.div)`
@@ -34,6 +38,22 @@ const PlayersContainer = styled(motion.div)`
   gap: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   width: 100%;
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (max-width: 480px) {
+    gap: ${({ theme }) => theme.spacing.xs};
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+    
+    /* Make player info cards more compact on mobile */
+    & > div {
+      width: calc(50% - ${({ theme }) => theme.spacing.xs});
+      min-width: 140px;
+    }
+  }
 `;
 
 const EnhancedGameControls = styled(GameControls)`
@@ -47,6 +67,12 @@ const EnhancedGameControls = styled(GameControls)`
   flex-direction: column;
   align-items: center;
   position: relative;
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.md};
+    margin-top: ${({ theme }) => theme.spacing.lg};
+    border-radius: ${({ theme }) => theme.borderRadius.medium};
+  }
 `;
 
 const ControlsSection = styled(motion.div)`
@@ -55,6 +81,10 @@ const ControlsSection = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.md};
+  
+  @media (max-width: 768px) {
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 const ButtonsRow = styled(motion.div)`
@@ -63,6 +93,18 @@ const ButtonsRow = styled(motion.div)`
   margin: ${({ theme }) => theme.spacing.md} 0;
   flex-wrap: wrap;
   justify-content: center;
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin: ${({ theme }) => theme.spacing.sm} 0;
+    width: 100%;
+    
+    /* Make buttons take full width on very small screens */
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
 `;
 
 const EnhancedButton = styled(Button)<{ variant?: 'primary' | 'secondary' | 'error' }>`
@@ -82,6 +124,17 @@ const EnhancedButton = styled(Button)<{ variant?: 'primary' | 'secondary' | 'err
   transition: all ${({ theme }) => theme.transitions.medium};
   position: relative;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
+    font-size: 1rem;
+    
+    /* Larger touch targets on mobile */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const StatusMessage = styled(motion.div)<{ type?: 'info' | 'warning' | 'success' }>`
@@ -110,6 +163,15 @@ const StatusMessage = styled(motion.div)<{ type?: 'info' | 'warning' | 'success'
       : type === 'warning'
         ? theme.colors.warning
         : theme.colors.success};
+  
+  @media (max-width: 768px) {
+    margin: ${({ theme }) => theme.spacing.sm} 0;
+    padding: ${({ theme }) => theme.spacing.sm};
+    font-size: 0.9rem;
+    
+    /* Make the border more visible on mobile */
+    border-left-width: 6px;
+  }
 `;
 
 const EnhancedModalOverlay = styled(ModalOverlay)`
@@ -121,12 +183,26 @@ const EnhancedModalContent = styled(ModalContent)`
   ${({ theme }) => theme.effects.glass}
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   padding: ${({ theme }) => theme.spacing.xl};
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 95%;
+  max-height: 95%;
   width: auto;
-  min-width: 500px;
+  min-width: min(500px, 95vw);
   box-shadow: ${({ theme }) => theme.shadows.large};
   border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.md};
+    overflow-y: auto;
+    min-width: min(450px, 95vw);
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+    border-radius: ${({ theme }) => theme.borderRadius.large};
+    min-width: 95vw;
+    max-width: 95vw;
+    max-height: 80vh;
+  }
 `;
 
 const EnhancedModalTitle = styled(ModalTitle)`
@@ -136,6 +212,11 @@ const EnhancedModalTitle = styled(ModalTitle)`
   text-shadow: ${({ theme }) => theme.shadows.text(theme.colors.primaryDark)};
   text-align: center;
   position: relative;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 const ModalDescription = styled.div`
@@ -144,12 +225,41 @@ const ModalDescription = styled.div`
   font-size: 1.1rem;
   line-height: 1.6;
   color: ${({ theme }) => theme.colors.onSurface};
+  
+  @media (max-width: 768px) {
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+    font-size: 0.9rem;
+    line-height: 1.3;
+    padding: 0 ${({ theme }) => theme.spacing.xs};
+  }
 `;
 
 const CardContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
+  
+  @media (max-width: 768px) {
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
+    
+    /* Scale down the card on mobile */
+    transform: scale(0.85);
+  }
+  
+  @media (max-width: 480px) {
+    transform: scale(0.7);
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+    
+    /* Ensure the card fits within the modal */
+    width: 100%;
+    overflow: hidden;
+  }
 `;
 
 const GamePlay: React.FC = () => {

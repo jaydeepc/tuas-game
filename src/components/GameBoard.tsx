@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import styled from 'styled-components';
 import { BoardContainer, BoardSpace } from './styled/GameElements';
@@ -27,6 +27,16 @@ const EnhancedBoardContainer = styled(BoardContainer)`
       radial-gradient(circle at 90% 80%, ${({ theme }) => theme.colors.secondaryLight}10 0%, transparent 30%);
     pointer-events: none;
     z-index: 0;
+  }
+  
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.md};
+    border-radius: ${({ theme }) => theme.borderRadius.large};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${({ theme }) => theme.spacing.sm};
+    border-radius: ${({ theme }) => theme.borderRadius.medium};
   }
 `;
 
@@ -93,9 +103,26 @@ const EnhancedBoardSpace = styled(BoardSpace)<{
   `}
   
   @media (max-width: 768px) {
-    width: 50px;
-    height: 50px;
-    margin: 4px;
+    width: 45px;
+    height: 45px;
+    margin: 3px;
+    border-width: 1px;
+    border-radius: ${({ theme }) => theme.borderRadius.medium};
+    
+    /* Adjust milestone indicator for mobile */
+    ${({ position }) => position % 10 === 0 && position !== 0 && `
+      &::after {
+        top: -10px;
+        right: -3px;
+        font-size: 12px;
+      }
+    `}
+  }
+  
+  @media (max-width: 480px) {
+    width: 35px;
+    height: 35px;
+    margin: 2px;
   }
 `;
 
@@ -117,6 +144,21 @@ const PositionNumber = styled.div<{ isSpecial: boolean }>`
     opacity: 1;
     transform: translateX(-50%) scale(1.1);
   }
+  
+  @media (max-width: 768px) {
+    top: -14px;
+    font-size: 10px;
+    padding: ${props => props.isSpecial ? '1px 4px' : '0'};
+  }
+  
+  @media (max-width: 480px) {
+    top: -12px;
+    font-size: 8px;
+    padding: ${props => props.isSpecial ? '1px 3px' : '0'};
+    
+    /* Hide position numbers on very small screens except for special positions */
+    display: ${props => props.isSpecial ? 'block' : 'none'};
+  }
 `;
 
 const BoardTokensContainer = styled.div`
@@ -126,6 +168,15 @@ const BoardTokensContainer = styled.div`
   gap: 2px;
   position: relative;
   z-index: 2;
+  
+  @media (max-width: 768px) {
+    gap: 1px;
+    transform: scale(0.9);
+  }
+  
+  @media (max-width: 480px) {
+    transform: scale(0.8);
+  }
 `;
 
 // Path animation effect
@@ -139,10 +190,45 @@ const PathIndicator = styled(motion.div)`
   border-radius: ${({ theme }) => theme.borderRadius.pill};
 `;
 
+// Custom hook for responsive design
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+  });
+  
+  useLayoutEffect(() => {
+    // Handler to call on window resize
+    function handleResize() {
+      // Set window width/height to state
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+    
+    // Remove event listener on cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // Empty array ensures that effect is only run on mount
+  
+  return windowSize;
+};
+
 const GameBoard: React.FC = () => {
   const { state } = useGame();
   const { boardSize, players, boardTokens } = state;
   const controls = useAnimation();
+  const { width } = useWindowSize();
+  
+  // Responsive breakpoints
+  const isMobile = width <= 768;
+  const isSmallMobile = width <= 480;
   
   // Create an array of board spaces
   const boardSpaces = Array.from({ length: boardSize + 1 }, (_, i) => i);
@@ -290,19 +376,31 @@ const GameBoard: React.FC = () => {
                 
                 {/* Player tokens */}
                 <AnimatePresence>
-                  {playersAtPosition.map((player, index) => (
-                    <PlayerTokenComponent 
-                      key={player.id}
-                      player={player}
-                      isActive={state.currentPlayerIndex === players.indexOf(player)}
-                      style={{ 
-                        zIndex: state.currentPlayerIndex === players.indexOf(player) ? 10 : 5,
-                        position: 'absolute',
-                        top: index % 2 === 0 ? '-15px' : '15px',
-                        left: index > 1 ? '-15px' : '15px'
-                      }}
-                    />
-                  ))}
+                  {playersAtPosition.map((player, index) => {
+                    // Responsive positioning for player tokens based on screen size
+                    const topOffset = isMobile 
+                      ? (index % 2 === 0 ? '-10px' : '10px')
+                      : (index % 2 === 0 ? '-15px' : '15px');
+                      
+                    const leftOffset = isMobile
+                      ? (index > 1 ? '-10px' : '10px')
+                      : (index > 1 ? '-15px' : '15px');
+                    
+                    return (
+                      <PlayerTokenComponent 
+                        key={player.id}
+                        player={player}
+                        isActive={state.currentPlayerIndex === players.indexOf(player)}
+                        style={{ 
+                          zIndex: state.currentPlayerIndex === players.indexOf(player) ? 10 : 5,
+                          position: 'absolute',
+                          top: topOffset,
+                          left: leftOffset,
+                          transform: isSmallMobile ? 'scale(0.8)' : 'none'
+                        }}
+                      />
+                    );
+                  })}
                 </AnimatePresence>
               </EnhancedBoardSpace>
             );

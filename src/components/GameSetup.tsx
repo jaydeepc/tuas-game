@@ -186,19 +186,40 @@ const GameSetup: React.FC = () => {
   const renderPlayerCountSelection = () => (
     <SetupStep>
       <SetupTitle>Select Number of Players</SetupTitle>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <div style={{ 
+        display: 'flex', 
+        flexWrap: window.innerWidth <= 480 ? 'wrap' : 'nowrap',
+        justifyContent: 'center', 
+        gap: window.innerWidth <= 480 ? '10px' : '20px',
+        maxWidth: '100%',
+        padding: '0 10px'
+      }}>
         {[2, 3, 4, 5, 6].map(count => (
           <Button
             key={count}
             variant={playerCount === count ? 'primary' : 'secondary'}
             onClick={() => setPlayerCount(count)}
+            style={{
+              minWidth: window.innerWidth <= 480 ? '40px' : 'auto',
+              padding: window.innerWidth <= 480 ? '8px 12px' : undefined
+            }}
           >
             {count}
           </Button>
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
-        <Button onClick={handleSetPlayerCount}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        marginTop: window.innerWidth <= 480 ? '20px' : '30px'
+      }}>
+        <Button 
+          onClick={handleSetPlayerCount}
+          style={{
+            width: window.innerWidth <= 480 ? '80%' : 'auto',
+            maxWidth: '300px'
+          }}
+        >
           Continue
         </Button>
       </div>
@@ -206,70 +227,88 @@ const GameSetup: React.FC = () => {
   );
   
   // Render token selection
-  const renderTokenSelection = () => (
-    <SetupStep>
-      <SetupTitle>Select Player Tokens</SetupTitle>
-      
-      <div style={{ marginBottom: '30px' }}>
-        {state.players.map((player, index) => (
-          <div 
-            key={player.id} 
-            style={{ 
-              marginBottom: '20px', 
-              padding: '15px', 
-              backgroundColor: '#1E1E1E', 
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
-            }}
-          >
-            <h3 style={{ marginBottom: '10px' }}>{player.name}</h3>
-            
-            <TokenSelection>
-              {availableTokens.map(token => {
-                const isSelected = player.token.type === token.type && player.token.color === token.color;
-                const isDisabled = isTokenSelected(token.type, token.color) && !isSelected;
-                
-                return (
-                  <TokenOption
-                    key={`${token.type}-${token.color}`}
-                    tokenType={token.type}
-                    tokenColor={token.color}
-                    isSelected={isSelected}
-                    style={{ 
-                      opacity: isDisabled ? 0.3 : 1,
-                      cursor: isDisabled ? 'not-allowed' : 'pointer'
-                    }}
-                    onClick={() => !isDisabled && handleSelectToken(player.id, token.type, token.color)}
-                  >
-                    {token.type === 'rock' ? (
-                      <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                        <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">R</text>
-                        <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
-                      </svg>
-                    ) : token.type === 'paper' ? (
-                      <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z" />
-                        <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">P</text>
-                        <path d="M13 9h5.5L13 3.5V9z" />
-                        <path d="M8 16h8v2H8zm0-4h8v2H8z" fill="currentColor" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                        <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">S</text>
-                        <path d="M14.5 14.5L12 12l2.5-2.5m-5 5L12 12 9.5 9.5" stroke="currentColor" strokeWidth="2" fill="none" />
-                      </svg>
-                    )}
-                  </TokenOption>
-                );
-              })}
-            </TokenSelection>
-          </div>
-        ))}
-      </div>
-    </SetupStep>
-  );
+  const renderTokenSelection = () => {
+    // Responsive styles
+    const iconSize = window.innerWidth <= 480 ? 20 : 24;
+    
+    return (
+      <SetupStep>
+        <SetupTitle>Select Player Tokens</SetupTitle>
+        
+        <div style={{ 
+          marginBottom: window.innerWidth <= 480 ? '20px' : '30px',
+          padding: window.innerWidth <= 480 ? '0 10px' : 0
+        }}>
+          {state.players.map((player, index) => (
+            <div 
+              key={player.id} 
+              style={{ 
+                marginBottom: window.innerWidth <= 480 ? '15px' : '20px', 
+                padding: window.innerWidth <= 480 ? '10px' : '15px', 
+                backgroundColor: '#1E1E1E', 
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
+              }}
+            >
+              <h3 style={{ 
+                marginBottom: window.innerWidth <= 480 ? '8px' : '10px',
+                fontSize: window.innerWidth <= 480 ? '1rem' : '1.17em',
+                textAlign: 'center'
+              }}>
+                {player.name}
+              </h3>
+              
+              <TokenSelection style={{
+                gap: window.innerWidth <= 480 ? '8px' : undefined
+              }}>
+                {availableTokens.map(token => {
+                  const isSelected = player.token.type === token.type && player.token.color === token.color;
+                  const isDisabled = isTokenSelected(token.type, token.color) && !isSelected;
+                  
+                  return (
+                    <TokenOption
+                      key={`${token.type}-${token.color}`}
+                      tokenType={token.type}
+                      tokenColor={token.color}
+                      isSelected={isSelected}
+                      style={{ 
+                        opacity: isDisabled ? 0.3 : 1,
+                        cursor: isDisabled ? 'not-allowed' : 'pointer',
+                        width: window.innerWidth <= 480 ? '60px' : '80px',
+                        height: window.innerWidth <= 480 ? '60px' : '80px'
+                      }}
+                      onClick={() => !isDisabled && handleSelectToken(player.id, token.type, token.color)}
+                    >
+                      {token.type === 'rock' ? (
+                        <svg viewBox="0 0 24 24" width={iconSize} height={iconSize} fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                          <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">R</text>
+                          <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
+                        </svg>
+                      ) : token.type === 'paper' ? (
+                        <svg viewBox="0 0 24 24" width={iconSize} height={iconSize} fill="currentColor">
+                          <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z" />
+                          <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">P</text>
+                          <path d="M13 9h5.5L13 3.5V9z" />
+                          <path d="M8 16h8v2H8zm0-4h8v2H8z" fill="currentColor" />
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24" width={iconSize} height={iconSize} fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                          <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">S</text>
+                          <path d="M14.5 14.5L12 12l2.5-2.5m-5 5L12 12 9.5 9.5" stroke="currentColor" strokeWidth="2" fill="none" />
+                        </svg>
+                      )}
+                    </TokenOption>
+                  );
+                })}
+              </TokenSelection>
+            </div>
+          ))}
+        </div>
+      </SetupStep>
+    );
+  };
   
   // Get the title for the current token placement phase
   const getTokenPlacementTitle = (): string => {
@@ -292,26 +331,48 @@ const GameSetup: React.FC = () => {
     // Create a simple board representation for token placement
     const boardSpaces = Array.from({ length: state.boardSize + 1 }, (_, i) => i);
     
+    // Responsive styles
+    const tokenSize = window.innerWidth <= 480 ? 40 : window.innerWidth <= 768 ? 45 : 50;
+    const positionSize = window.innerWidth <= 480 ? 30 : window.innerWidth <= 768 ? 35 : 40;
+    const fontSize = window.innerWidth <= 480 ? '12px' : window.innerWidth <= 768 ? '13px' : '14px';
+    const iconSize = window.innerWidth <= 480 ? 20 : 24;
+    
     return (
       <SetupStep>
         <SetupTitle>{getTokenPlacementTitle()}</SetupTitle>
         
         <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ marginBottom: '10px' }}>
+          <h3 style={{ 
+            marginBottom: '10px',
+            fontSize: window.innerWidth <= 480 ? '16px' : window.innerWidth <= 768 ? '18px' : '20px',
+            textAlign: 'center'
+          }}>
             {state.players && state.players.length > 0 && state.setupPlayerIndex < state.players.length
               ? `${state.players[state.setupPlayerIndex].name}'s Turn - Select a Board Token:`
               : 'Select a Board Token:'}
           </h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
             {/* Debug info */}
-            <div style={{ marginBottom: '10px', fontSize: '12px', color: '#888' }}>
+            <div style={{ 
+              marginBottom: '10px', 
+              fontSize: window.innerWidth <= 480 ? '10px' : '12px', 
+              color: '#888',
+              textAlign: 'center',
+              width: '100%'
+            }}>
               Current phase: {state.setupStep}, 
               Current player type: {state.players[state.setupPlayerIndex]?.token.type},
               Available tokens: {state.boardTokens.filter(t => t.position === -1).length}
             </div>
             
             {/* Show all available tokens for debugging */}
-            <div style={{ marginBottom: '20px', fontSize: '12px', color: '#888' }}>
+            <div style={{ 
+              marginBottom: '20px', 
+              fontSize: window.innerWidth <= 480 ? '10px' : '12px', 
+              color: '#888',
+              width: '100%',
+              textAlign: 'center'
+            }}>
               <div>Available tokens:</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'center' }}>
                 {state.boardTokens
@@ -342,8 +403,8 @@ const GameSetup: React.FC = () => {
                 <div
                   key={token.id}
                   style={{
-                    width: '50px',
-                    height: '50px',
+                    width: `${tokenSize}px`,
+                    height: `${tokenSize}px`,
                     borderRadius: '4px',
                     backgroundColor: '#000',
                     border: `2px solid ${
@@ -363,20 +424,20 @@ const GameSetup: React.FC = () => {
                   onClick={() => setSelectedBoardToken(token.id)}
                 >
                   {token.type === 'rock' ? (
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <svg viewBox="0 0 24 24" width={iconSize} height={iconSize} fill="currentColor">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                       <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">R</text>
                       <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth="2" />
                     </svg>
                   ) : token.type === 'paper' ? (
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <svg viewBox="0 0 24 24" width={iconSize} height={iconSize} fill="currentColor">
                       <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z" />
                       <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">P</text>
                       <path d="M13 9h5.5L13 3.5V9z" />
                       <path d="M8 16h8v2H8zm0-4h8v2H8z" fill="currentColor" />
                     </svg>
                   ) : (
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <svg viewBox="0 0 24 24" width={iconSize} height={iconSize} fill="currentColor">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                       <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="12" fontWeight="bold">S</text>
                       <path d="M14.5 14.5L12 12l2.5-2.5m-5 5L12 12 9.5 9.5" stroke="currentColor" strokeWidth="2" fill="none" />
@@ -388,11 +449,17 @@ const GameSetup: React.FC = () => {
         </div>
         
         <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ marginBottom: '10px' }}>Select a Position:</h3>
+          <h3 style={{ 
+            marginBottom: '10px',
+            fontSize: window.innerWidth <= 480 ? '16px' : window.innerWidth <= 768 ? '18px' : '20px',
+            textAlign: 'center'
+          }}>
+            Select a Position:
+          </h3>
           <div style={{ 
             display: 'flex', 
             flexWrap: 'wrap', 
-            gap: '5px', 
+            gap: window.innerWidth <= 480 ? '3px' : '5px', 
             justifyContent: 'center',
             maxWidth: '800px',
             margin: '0 auto'
@@ -405,15 +472,15 @@ const GameSetup: React.FC = () => {
                 <div
                   key={`position-${position}`}
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    width: `${positionSize}px`,
+                    height: `${positionSize}px`,
                     borderRadius: '4px',
                     backgroundColor: position === 0 ? '#3700B3' : position === state.boardSize ? '#018786' : '#1E1E1E',
                     border: `2px solid ${isSelected ? '#BB86FC' : isOccupied ? '#BB86FC80' : '#FFFFFF40'}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '14px',
+                    fontSize,
                     cursor: isOccupied ? 'not-allowed' : 'pointer',
                     opacity: isOccupied ? 0.5 : 1,
                     boxShadow: isSelected ? '0 0 10px #BB86FC' : 'none'
@@ -427,10 +494,22 @@ const GameSetup: React.FC = () => {
           </div>
         </div>
         
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: window.innerWidth <= 480 ? 'column' : 'row',
+          justifyContent: 'center', 
+          gap: window.innerWidth <= 480 ? '10px' : '20px', 
+          marginTop: '20px',
+          width: window.innerWidth <= 480 ? '100%' : 'auto',
+          maxWidth: window.innerWidth <= 480 ? '300px' : 'none',
+          margin: window.innerWidth <= 480 ? '20px auto 0' : '20px auto 0'
+        }}>
           <Button
             disabled={!selectedBoardToken || selectedPosition === -1}
             onClick={() => selectedBoardToken && selectedPosition !== -1 && handlePlaceBoardToken(selectedBoardToken, selectedPosition)}
+            style={{
+              width: window.innerWidth <= 480 ? '100%' : 'auto'
+            }}
           >
             Place Token
           </Button>
@@ -438,6 +517,9 @@ const GameSetup: React.FC = () => {
           <Button
             variant="secondary"
             onClick={() => dispatch({ type: 'PLACE_ALL_TOKENS_RANDOMLY' })}
+            style={{
+              width: window.innerWidth <= 480 ? '100%' : 'auto'
+            }}
           >
             Place All Tokens Randomly
           </Button>
@@ -456,12 +538,31 @@ const GameSetup: React.FC = () => {
   const renderReady = () => (
     <SetupStep>
       <SetupTitle>Ready to Start!</SetupTitle>
-      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <p>All players have selected their tokens and all board tokens have been placed.</p>
-        <p>Click the button below to start the game!</p>
+      <div style={{ 
+        textAlign: 'center', 
+        marginBottom: window.innerWidth <= 480 ? '20px' : '30px',
+        padding: '0 15px'
+      }}>
+        <p style={{ fontSize: window.innerWidth <= 480 ? '0.9rem' : '1rem' }}>
+          All players have selected their tokens and all board tokens have been placed.
+        </p>
+        <p style={{ 
+          fontSize: window.innerWidth <= 480 ? '0.9rem' : '1rem',
+          marginTop: window.innerWidth <= 480 ? '10px' : '15px'
+        }}>
+          Click the button below to start the game!
+        </p>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button onClick={handleStartGame}>
+        <Button 
+          onClick={handleStartGame}
+          style={{
+            width: window.innerWidth <= 480 ? '80%' : 'auto',
+            maxWidth: '300px',
+            padding: window.innerWidth <= 480 ? '12px 24px' : undefined,
+            fontSize: window.innerWidth <= 480 ? '1.1rem' : undefined
+          }}
+        >
           Start Game
         </Button>
       </div>

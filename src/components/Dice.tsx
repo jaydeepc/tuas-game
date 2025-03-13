@@ -12,6 +12,18 @@ const EnhancedDiceContainer = styled(DiceContainer)`
   gap: ${({ theme }) => theme.spacing.lg};
   margin: ${({ theme }) => theme.spacing.lg} 0;
   perspective: 1000px;
+  
+  @media (max-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.md};
+    margin: ${({ theme }) => theme.spacing.md} 0;
+  }
+  
+  @media (max-width: 480px) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin: ${({ theme }) => theme.spacing.sm} 0;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const EnhancedDice = styled(StyledDice)<{ 
@@ -75,6 +87,25 @@ const EnhancedDice = styled(StyledDice)<{
     transform: translateY(2px);
     box-shadow: ${({ theme }) => theme.shadows.medium};
   }
+  
+  @media (max-width: 768px) {
+    width: 70px;
+    height: 70px;
+    font-size: 1.5rem;
+    
+    &::after {
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2rem;
+  }
 `;
 
 const DiceValue = styled(motion.div)`
@@ -87,6 +118,14 @@ const DiceValue = styled(motion.div)`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.onPrimary};
   text-shadow: ${({ theme }) => theme.shadows.text(theme.colors.primaryDark)};
+  
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const DiceIcon = styled(motion.div)`
@@ -109,6 +148,29 @@ const DiceIcon = styled(motion.div)`
     font-weight: bold;
     text-transform: uppercase;
   }
+  
+  @media (max-width: 768px) {
+    svg {
+      width: 35px;
+      height: 35px;
+    }
+    
+    span {
+      font-size: 12px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+    
+    span {
+      font-size: 10px;
+      margin-top: 3px;
+    }
+  }
 `;
 
 const RollButton = styled(motion.div)`
@@ -121,6 +183,14 @@ const RollButton = styled(motion.div)`
   color: ${({ theme }) => theme.colors.onPrimary};
   text-shadow: ${({ theme }) => theme.shadows.text(theme.colors.primaryDark)};
   z-index: 10;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 // Dice dots for regular dice
@@ -133,6 +203,14 @@ const DiceDots = styled.div<{ value: number }>`
   justify-content: space-around;
   align-items: center;
   padding: 10px;
+  
+  @media (max-width: 768px) {
+    padding: 8px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 6px;
+  }
 `;
 
 const DiceDot = styled.div`
@@ -141,6 +219,17 @@ const DiceDot = styled.div`
   border-radius: 50%;
   background-color: white;
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+  
+  @media (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+  }
 `;
 
 // Simple component to render the correct number of dots based on dice value
