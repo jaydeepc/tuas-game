@@ -224,6 +224,43 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       };
     }
     
+    case 'PLACE_ALL_TOKENS_RANDOMLY': {
+      // Get all unplaced tokens
+      const unplacedTokens = state.boardTokens.filter(token => token.position === -1);
+      
+      // Get all available positions (1 to boardSize-1, excluding 0 which is the start position)
+      const availablePositions = Array.from(
+        { length: state.boardSize - 1 }, 
+        (_, i) => i + 1
+      );
+      
+      // Shuffle the available positions
+      const shuffledPositions = [...availablePositions].sort(() => Math.random() - 0.5);
+      
+      // Assign random positions to unplaced tokens
+      const updatedBoardTokens = state.boardTokens.map(token => {
+        if (token.position === -1) {
+          // Get a random position from the shuffled positions
+          const randomPosition = shuffledPositions.pop() || 1;
+          return {
+            ...token,
+            position: randomPosition
+          };
+        }
+        return token;
+      });
+      
+      console.log("Randomly placed all tokens:", updatedBoardTokens);
+      
+      // Move to the ready phase
+      return {
+        ...state,
+        boardTokens: updatedBoardTokens,
+        setupStep: 'ready',
+        currentTokenPlacementType: null
+      };
+    }
+    
     case 'NEXT_TOKEN_PLACEMENT_PHASE': {
       // Check if all tokens have been placed
       const allTokensPlaced = state.boardTokens.every(token => token.position !== -1);
