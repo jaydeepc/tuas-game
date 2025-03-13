@@ -130,6 +130,7 @@ export type GameAction =
   | { type: 'SET_PLAYER_COUNT', count: number }
   | { type: 'SELECT_TOKEN', playerId: string, tokenType: TokenType, tokenColor: TokenColor }
   | { type: 'PLACE_BOARD_TOKEN', tokenId: string, position: number }
+  | { type: 'PLACE_ALL_TOKENS_RANDOMLY' }
   | { type: 'NEXT_TOKEN_PLACEMENT_PHASE' }
   | { type: 'START_GAME' }
   | { type: 'ROLL_DICE', diceType: DiceType }

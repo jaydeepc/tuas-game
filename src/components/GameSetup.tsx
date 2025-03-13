@@ -427,12 +427,19 @@ const GameSetup: React.FC = () => {
           </div>
         </div>
         
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
           <Button
             disabled={!selectedBoardToken || selectedPosition === -1}
             onClick={() => selectedBoardToken && selectedPosition !== -1 && handlePlaceBoardToken(selectedBoardToken, selectedPosition)}
           >
             Place Token
+          </Button>
+          
+          <Button
+            variant="secondary"
+            onClick={() => dispatch({ type: 'PLACE_ALL_TOKENS_RANDOMLY' })}
+          >
+            Place All Tokens Randomly
           </Button>
         </div>
         
