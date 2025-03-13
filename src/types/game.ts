@@ -133,7 +133,7 @@ export type GameAction =
   | { type: 'PLACE_ALL_TOKENS_RANDOMLY' }
   | { type: 'NEXT_TOKEN_PLACEMENT_PHASE' }
   | { type: 'START_GAME' }
-  | { type: 'ROLL_DICE', diceType: DiceType }
+  | { type: 'ROLL_DICE', diceType: DiceType, value?: DiceValue }
   | { type: 'MOVE_PLAYER', playerId: string, spaces: number }
   | { type: 'DRAW_CARD', cardType: CardType }
   | { type: 'GIVE_CARD', fromPlayerId: string, toPlayerId: string, cardType: CardType }

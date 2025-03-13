@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import styled from 'styled-components';
 import { Dice as StyledDice, DiceContainer } from './styled/GameElements';
 import { useGame } from '../context/GameContext';
-import type { DiceType, DiceValue } from '../types/game';
+import type { DiceType, DiceValue, RegularDiceValue, RPSDiceValue } from '../types/game';
 
 // Enhanced styled components for dice
 const EnhancedDiceContainer = styled(DiceContainer)`
@@ -222,6 +222,15 @@ const Dice: React.FC<DiceProps> = ({ type, onRoll }) => {
     
     setIsRolling(true);
     
+    // Generate a random value first
+    let diceValue: DiceValue;
+    if (type === 'regular') {
+      diceValue = (Math.floor(Math.random() * 6) + 1) as RegularDiceValue;
+    } else {
+      const rpsValues: RPSDiceValue[] = ['rock', 'paper', 'scissors'];
+      diceValue = rpsValues[Math.floor(Math.random() * 3)];
+    }
+    
     // Animate the dice roll
     controls.start({
       rotateX: [0, 360, 720, 1080, 1440],
@@ -231,25 +240,19 @@ const Dice: React.FC<DiceProps> = ({ type, onRoll }) => {
     
     // Simulate rolling animation
     setTimeout(() => {
-      dispatch({ type: 'ROLL_DICE', diceType: type });
-      
-      // Get the updated dice value after dispatch
-      const updatedDice = type === 'regular' 
-        ? state.dice.regular 
-        : state.dice.rps[0];
+      // Dispatch with the pre-generated value to ensure consistency
+      dispatch({ 
+        type: 'ROLL_DICE', 
+        diceType: type,
+        value: diceValue // Pass the value to the reducer
+      });
       
       setIsRolling(false);
       
-      // Use the dice value from the state after dispatch
-      if (onRoll && updatedDice.value) {
-        console.log(`Rolling ${type} dice, value: ${updatedDice.value}`);
-        onRoll(updatedDice.value);
-      } else if (type === 'regular') {
-        // Fallback for regular dice if the value is not updated in time
-        const randomValue = Math.floor(Math.random() * 6) + 1;
-        console.log(`Fallback rolling regular dice, value: ${randomValue}`);
-        // Cast to RegularDiceValue to satisfy TypeScript
-        if (onRoll) onRoll(randomValue as 1 | 2 | 3 | 4 | 5 | 6);
+      // Use our pre-generated value for the callback
+      if (onRoll) {
+        console.log(`Rolling ${type} dice, value: ${diceValue}`);
+        onRoll(diceValue);
       }
     }, 1500);
   };

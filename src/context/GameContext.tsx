@@ -334,7 +334,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     
     case 'ROLL_DICE': {
       if (action.diceType === 'regular') {
-        const diceValue = rollDice(6) as RegularDiceValue;
+        // Use the provided value if available, otherwise generate a random one
+        const diceValue = action.value as RegularDiceValue || rollDice(6) as RegularDiceValue;
         
         return {
           ...state,
@@ -349,8 +350,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         };
       } else {
         // RPS dice
-        const rps1Value = rollRPSDice();
-        const rps2Value = rollRPSDice();
+        // Use the provided value for the first dice if available
+        const rps1Value = action.value as RPSDiceValue || rollRPSDice();
+        const rps2Value = rollRPSDice(); // Second dice is always random
         
         const updatedRPSDice = [
           { ...state.dice.rps[0], value: rps1Value, rolling: false },
