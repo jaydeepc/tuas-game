@@ -2,13 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { PlayerToken as StyledPlayerToken } from './styled/GameElements';
 import { Player } from '../types/game';
+import { CSSProperties } from 'styled-components';
 
-interface PlayerTokenProps {
+export interface PlayerTokenProps {
   player: Player;
   isActive: boolean;
+  style?: CSSProperties;
 }
 
-const PlayerToken: React.FC<PlayerTokenProps> = ({ player, isActive }) => {
+const PlayerToken: React.FC<PlayerTokenProps> = ({ player, isActive, style }) => {
   const { token } = player;
   
   // Token icon based on type
@@ -57,6 +59,7 @@ const PlayerToken: React.FC<PlayerTokenProps> = ({ player, isActive }) => {
         stiffness: 500,
         damping: 30
       }}
+      style={style}
     >
       {getTokenIcon()}
     </StyledPlayerToken>
