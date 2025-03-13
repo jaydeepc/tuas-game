@@ -1100,7 +1100,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           currentPlayerIndex: (nextPlayerIndex + 1) % state.players.length,
           dice: updatedDice,
           duel: updatedDuel,
-          cardInPlay: null
+          cardInPlay: null,
+          phase: 'playing' // Always reset to playing phase for the next player
         };
       }
       
@@ -1109,7 +1110,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         currentPlayerIndex: nextPlayerIndex,
         dice: updatedDice,
         duel: updatedDuel,
-        cardInPlay: null
+        cardInPlay: null,
+        phase: 'playing' // Always reset to playing phase for the next player
       };
     }
     
