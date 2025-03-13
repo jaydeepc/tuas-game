@@ -677,10 +677,13 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           return player;
         });
         
+        // Automatically play the card to show its effect
         return {
           ...state,
           players: updatedPlayers,
-          advantageCards: advantageCards.slice(1)
+          advantageCards: advantageCards.slice(1),
+          cardInPlay: drawnCard,
+          phase: 'cardEffect'
         };
       } else {
         // If disadvantage deck is empty, shuffle discard pile
@@ -705,10 +708,13 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           return player;
         });
         
+        // Automatically play the card to show its effect
         return {
           ...state,
           players: updatedPlayers,
-          disadvantageCards: disadvantageCards.slice(1)
+          disadvantageCards: disadvantageCards.slice(1),
+          cardInPlay: drawnCard,
+          phase: 'cardEffect'
         };
       }
     }
@@ -767,7 +773,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       
       if (!cardToPlay) return state;
       
-      return {
+      // Apply card effect
+      let updatedState: GameState = {
         ...state,
         players: updatedPlayers,
         discardedAdvantageCards: updatedDiscardedAdvantageCards,
@@ -775,6 +782,59 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         cardInPlay: cardToPlay,
         phase: 'cardEffect'
       };
+      
+      // Apply the effect based on the card type
+      if (cardToPlay.effect.type === 'move') {
+        const moveEffect = cardToPlay.effect;
+        // Move the current player by the specified number of spaces
+        updatedState = {
+          ...updatedState,
+          players: updatedState.players.map(player => {
+            if (player.id === currentPlayer.id) {
+              const newPosition = Math.max(0, Math.min(state.boardSize, player.token.position + moveEffect.spaces));
+              return {
+                ...player,
+                token: {
+                  ...player.token,
+                  position: newPosition
+                }
+              };
+            }
+            return player;
+          })
+        };
+        
+        // Check for winner
+        const winner = updatedState.players.find(player => player.token.position >= state.boardSize);
+        if (winner) {
+          updatedState = {
+            ...updatedState,
+            phase: 'gameOver' as GamePhase,
+            winner
+          };
+        }
+      } else if (cardToPlay.effect.type === 'skipTurn') {
+        // Mark the next player to skip their turn
+        const nextPlayerIndex = (state.currentPlayerIndex + 1) % state.players.length;
+        updatedState = {
+          ...updatedState,
+          players: updatedState.players.map((player, index) => {
+            if (index === nextPlayerIndex) {
+              return {
+                ...player,
+                hasSkippedTurn: true
+              };
+            }
+            return player;
+          })
+        };
+      } else if (cardToPlay.effect.type === 'drawCards') {
+        const drawCardsEffect = cardToPlay.effect;
+        // This will be handled in the UI - player will draw additional cards
+        console.log(`Player should draw ${drawCardsEffect.count} more cards`);
+      }
+      
+      return updatedState;
     }
     
     case 'INITIATE_DUEL': {
