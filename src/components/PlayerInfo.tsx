@@ -391,3 +391,4 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({ player, isActive }) => {
   );
 };
 
+export default PlayerInfo;
